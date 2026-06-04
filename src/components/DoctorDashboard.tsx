@@ -100,6 +100,11 @@ export default function DoctorDashboard({
   const [bookingReason, setBookingReason] = useState('');
   const [bookingUrgent, setBookingUrgent] = useState(false);
 
+  // App reschedule editor states (Requirement 6)
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [newAppDate, setNewAppDate] = useState('');
+  const [newAppTime, setNewAppTime] = useState('09:00');
+
   // Refresh loops
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -352,6 +357,21 @@ export default function DoctorDashboard({
     }
   };
 
+  const handleSendEntryNotification = async (waitListId: string) => {
+    const resp = await apiFetch(`/api/waiting-list/${waitListId}/notify-entry`, {
+      method: 'POST'
+    });
+    if (resp && resp.ok) {
+      onShowToast(
+        lang === 'ar' 
+          ? 'تم إرسال إشعار السماح بالدخول للمريض وموظف الاستقبال بنجاح!' 
+          : 'Entry authorized notification sent to patient and receptionist!', 
+        'success'
+      );
+      setRefreshTrigger(p => p + 1);
+    }
+  };
+
   const handleQueueCheckout = async (waitListId: string) => {
     const resp = await apiFetch(`/api/waiting-list/${waitListId}`, {
       method: 'PUT',
@@ -425,6 +445,30 @@ export default function DoctorDashboard({
     if (resp && resp.ok) {
       onShowToast(lang === 'ar' ? 'تم إلغاء الموعد المبرمج بنجاح' : 'Appointment has been cancelled', 'success');
       setRefreshTrigger(p => p + 1);
+    }
+  };
+
+  // Reschedule Appointment (Requirement 6)
+  const handleUpdateAppointment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAppointment) return;
+
+    const resp = await apiFetch(`/api/appointments/${editingAppointment.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        date: newAppDate,
+        timeSlot: newAppTime,
+        reason: editingAppointment.reason,
+        isUrgent: editingAppointment.isUrgent
+      })
+    });
+
+    if (resp && resp.ok) {
+      onShowToast(lang === 'ar' ? 'تمت إعادة جدولة الموعد وتعديله بنجاح' : 'Appointment rescheduled successfully', 'success');
+      setEditingAppointment(null);
+      setRefreshTrigger(p => p + 1);
+    } else {
+      onShowToast(lang === 'ar' ? 'عفواً، الخلية الزمنية المطلوبة محجوزة مسبقاً' : 'The selected slot is busy', 'error');
     }
   };
 
@@ -670,6 +714,57 @@ export default function DoctorDashboard({
           {/* TAB 1: DASHBOARD & WORKPLACE LOGISTICS */}
           {activeTab === 'dashboard' && (
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+              
+              {/* NEXT PATIENT SUMMONS CONTROLLER WIDGET (Requirement 6) */}
+              <div className="xl:col-span-12 p-5 bg-gradient-to-r from-emerald-600 via-emerald-700 to-indigo-700 text-white rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1 text-right">
+                  <div className="flex items-center gap-1.5 text-emerald-200 font-extrabold text-[10px] uppercase tracking-wider bg-white/15 w-fit px-2.5 py-1 rounded">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                    <span>{isRtl ? 'نظام استدعاء المريض التالي في الطابور' : 'NEXT PATIENT WAITING OUTSIDE'}</span>
+                  </div>
+                  {(() => {
+                    const nextWaiting = waitingList.find(q => q.status === 'waiting');
+                    if (nextWaiting) {
+                      return (
+                        <h3 className="font-black text-sm md:text-base mt-1">
+                          {isRtl ? `المريض القادم: ${nextWaiting.patientName}` : `Next patient: ${nextWaiting.patientName}`} (دور #{nextWaiting.queueNumber})
+                        </h3>
+                      );
+                    }
+                    return (
+                      <h3 className="font-medium text-xs text-slate-100 italic mt-1">
+                        {isRtl ? 'لا يوجد مرضى بانتظار الدخول بنظام الانتظار حالياً' : 'No patients currently waiting in salon'}
+                      </h3>
+                    );
+                  })()}
+                </div>
+
+                {(() => {
+                  const nextWaiting = waitingList.find(q => q.status === 'waiting');
+                  if (nextWaiting) {
+                    return (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => handleSendEntryNotification(nextWaiting.id)}
+                          className="py-2.5 px-4 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs md:text-sm rounded-xl shadow transition transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer select-none"
+                        >
+                          <span>📢</span>
+                          <span>{isRtl ? 'إرسال إشعار مريض وموظف الاستقبال للسماح بالدخول' : 'Send Entry Notification to Patient & Receptionist'}</span>
+                        </button>
+                        <button
+                          onClick={() => handleQueueAdmit(nextWaiting.id)}
+                          className="py-2.5 px-4 bg-white hover:bg-slate-50 text-[#096649] font-black text-xs md:text-sm rounded-xl shadow transition transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer select-none"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-emerald-605" />
+                          <span>{isRtl ? 'استدعاء المريض لغرفة الكشف' : 'Admit Patient'}</span>
+                        </button>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+
               {/* Active waiting queue panel (Left/Right depending on lang) - Realtime Lobby */}
               <div className="xl:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -726,13 +821,23 @@ export default function DoctorDashboard({
 
                             <div className="flex gap-2">
                               {q.status === 'waiting' ? (
-                                <button
-                                  onClick={() => handleQueueAdmit(q.id)}
-                                  className="py-1.5 px-3 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1 shadow transition cursor-pointer"
-                                >
-                                  <Activity className="w-3.5 h-3.5" />
-                                  <span>{t.btnCallConsult}</span>
-                                </button>
+                                <div className="flex gap-1.5">
+                                  <button
+                                    onClick={() => handleSendEntryNotification(q.id)}
+                                    className="py-1.5 px-2.5 rounded-lg text-xs font-extrabold bg-amber-400 hover:bg-amber-300 text-slate-900 flex items-center gap-1 shadow transition cursor-pointer"
+                                    title={isRtl ? 'إرسال إشعار دخول للمريض والاستقبال' : 'Notify Entry'}
+                                  >
+                                    <span>📢</span>
+                                    <span>{isRtl ? 'إشعار الدخول' : 'Notify Entry'}</span>
+                                  </button>
+                                  <button
+                                    onClick={() => handleQueueAdmit(q.id)}
+                                    className="py-1.5 px-3 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1 shadow transition cursor-pointer"
+                                  >
+                                    <Activity className="w-3.5 h-3.5" />
+                                    <span>{t.btnCallConsult}</span>
+                                  </button>
+                                </div>
                               ) : (
                                 <button
                                   onClick={() => {
@@ -1014,7 +1119,7 @@ export default function DoctorDashboard({
                       </p>
                     </div>
 
-                    {selectedPatient.extraFields && selectedPatient.extraFields.map((f, idx) => (
+                    {Array.isArray(selectedPatient.extraFields) && selectedPatient.extraFields.map((f, idx) => (
                       <div key={idx} className="flex justify-between items-center py-1 bg-slate-100/50 dark:bg-slate-900 p-2 rounded">
                         <span className="font-extrabold text-slate-500">{f.label}</span>
                         <span className="font-extrabold">{f.value}</span>
@@ -1318,14 +1423,27 @@ export default function DoctorDashboard({
                             <p className="text-[11px] text-slate-400">📞 {app.patientPhone} • {app.reason}</p>
                           </div>
 
-                          {app.status !== 'cancelled' && (
-                            <button
-                              type="button"
-                              onClick={() => handleCancelAppointment(app.id)}
-                              className="py-1 px-2 text-[10px] md:text-xs font-bold border border-rose-200 text-rose-600 rounded hover:bg-rose-50 transition cursor-pointer select-none"
-                            >
-                              ❌ {lang === 'ar' ? 'إلغاء الموعد' : 'Cancel Slot'}
-                            </button>
+                          {app.status !== 'cancelled' && app.status !== 'completed' && (
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingAppointment(app);
+                                  setNewAppDate(app.date);
+                                  setNewAppTime(app.timeSlot);
+                                }}
+                                className="py-1 px-2.5 text-[10px] font-extrabold border border-blue-200 text-blue-600 rounded hover:bg-blue-50 transition cursor-pointer select-none"
+                              >
+                                ✏️ {lang === 'ar' ? 'تعديل الموعد' : 'Edit Slot'}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleCancelAppointment(app.id)}
+                                className="py-1 px-2.5 text-[10px] font-extrabold border border-rose-200 text-rose-600 rounded hover:bg-rose-50 transition cursor-pointer select-none"
+                              >
+                                ❌ {lang === 'ar' ? 'إلغاء الموعد' : 'Cancel Slot'}
+                              </button>
+                            </div>
                           )}
                         </div>
                       ))
@@ -1470,7 +1588,7 @@ export default function DoctorDashboard({
             </div>
 
             <form onSubmit={handleAddPatientSubmit} className="space-y-4 max-h-[500px] overflow-y-auto px-1">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs md:text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
                 <div className="space-y-1">
                   <label className="font-bold text-slate-400">{t.formFullName} *</label>
                   <input
@@ -1494,20 +1612,9 @@ export default function DoctorDashboard({
                     placeholder="+966-50..."
                   />
                 </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formEmail}</label>
-                  <input
-                    type="email"
-                    value={newPatientForm.email}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, email: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-1 focus:ring-emerald-500 font-mono"
-                    placeholder="name@email.com"
-                  />
-                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs md:text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
                 <div className="space-y-1">
                   <label className="font-bold text-slate-400">{t.formAge}</label>
                   <input
@@ -1520,118 +1627,13 @@ export default function DoctorDashboard({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formGender}</label>
-                  <select
-                    value={newPatientForm.gender}
-                    onChange={(e: any) => setNewPatientForm({ ...newPatientForm, gender: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg"
-                  >
-                    <option value="male">{t.genderMale}</option>
-                    <option value="female">{t.genderFemale}</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formSocialStatus}</label>
-                  <select
-                    value={newPatientForm.socialStatus}
-                    onChange={(e: any) => setNewPatientForm({ ...newPatientForm, socialStatus: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg"
-                  >
-                    <option value="single">Single</option>
-                    <option value="married">Married</option>
-                    <option value="divorced">Divorced</option>
-                    <option value="widowed">Widowed</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formJob}</label>
+                  <label className="font-bold text-slate-400">{t.formAddress}</label>
                   <input
                     type="text"
-                    value={newPatientForm.job}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, job: e.target.value })}
+                    value={newPatientForm.address}
+                    onChange={(e) => setNewPatientForm({ ...newPatientForm, address: e.target.value })}
                     className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg"
-                    placeholder="e.g. Engineer"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1 text-xs md:text-sm">
-                <label className="font-bold text-slate-400">{t.formAddress}</label>
-                <input
-                  type="text"
-                  value={newPatientForm.address}
-                  onChange={(e) => setNewPatientForm({ ...newPatientForm, address: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg"
-                  placeholder="e.g. Riyadh, Olaya district"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs md:text-sm">
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formChronic}</label>
-                  <textarea
-                    rows={2}
-                    value={newPatientForm.chronicDiseases}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, chronicDiseases: e.target.value })}
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs"
-                    placeholder="e.g. Hypertension"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formAllergies}</label>
-                  <textarea
-                    rows={2}
-                    value={newPatientForm.allergies}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, allergies: e.target.value })}
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs"
-                    placeholder="e.g. Penicillin"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-400">{t.formMedications}</label>
-                  <textarea
-                    rows={2}
-                    value={newPatientForm.currentMedications}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, currentMedications: e.target.value })}
-                    className="w-full p-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs"
-                    placeholder="e.g. Amlodipine 5mg QD"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1 text-xs md:text-sm">
-                <label className="font-bold text-slate-400">{t.formReason} *</label>
-                <input
-                  type="text"
-                  required
-                  value={newPatientForm.reasonForVisit}
-                  onChange={(e) => setNewPatientForm({ ...newPatientForm, reasonForVisit: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg"
-                  placeholder="Reason for consulting doctor today..."
-                />
-              </div>
-
-              {/* Dynamic specialty custom field added */}
-              <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-250 dark:border-slate-800 space-y-2">
-                <p className="font-black text-xs text-slate-500">➕ {lang === 'ar' ? 'إضافة حقل طبي مخصص لدواعي التخصص' : 'Specialty Custom EHR Metadata Key'}</p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <input
-                    type="text"
-                    value={newPatientForm.extraFieldName}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, extraFieldName: e.target.value })}
-                    placeholder={lang === 'ar' ? 'اسم الحقل (مثال: المدخن)' : 'Field label (e.g. Blood type)'}
-                    className="p-2 bg-white dark:bg-slate-900 border rounded"
-                  />
-                  <input
-                    type="text"
-                    value={newPatientForm.extraFieldValue}
-                    onChange={(e) => setNewPatientForm({ ...newPatientForm, extraFieldValue: e.target.value })}
-                    placeholder={lang === 'ar' ? 'القيمة الافتراضية' : 'Default value'}
-                    className="p-2 bg-white dark:bg-slate-900 border rounded"
+                    placeholder="e.g. Riyadh, Olaya district"
                   />
                 </div>
               </div>
@@ -1881,6 +1883,77 @@ export default function DoctorDashboard({
                 <span>{t.printPrescription}</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Structured Medical Rescheduling Overlay (Requirement 6) */}
+      {editingAppointment && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl border-t-4 border-emerald-605 text-right space-y-4" dir={isRtl ? 'rtl' : 'ltr'}>
+            <div className="flex justify-between items-center border-b pb-3 text-right">
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-emerald-600" />
+                <span>{isRtl ? 'إعادة جدولة وتعديل الموعد' : 'Reschedule & Modify Appointment'}</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingAppointment(null)}
+                className="text-slate-400 hover:text-slate-650 text-sm font-black select-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 dark:bg-slate-950 border rounded-xl leading-normal space-y-1 text-right">
+              <p className="text-xs text-slate-600 dark:text-slate-400"><strong>{isRtl ? 'اسم المريض:' : 'Patient Name:'}</strong> {editingAppointment.patientName}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400"><strong>{isRtl ? 'الموعد القديم:' : 'Old Schedule:'}</strong> {editingAppointment.date} في {editingAppointment.timeSlot}</p>
+            </div>
+
+            <form onSubmit={handleUpdateAppointment} className="space-y-4">
+              <div className="space-y-1 text-right text-xs">
+                <label className="font-bold text-slate-450">{isRtl ? 'تحديد التاريخ الجديد' : 'New Appointment Date'}</label>
+                <input
+                  type="date"
+                  required
+                  value={newAppDate}
+                  onChange={(e) => setNewAppDate(e.target.value)}
+                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border rounded-xl font-mono focus:outline-none text-slate-800 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1 text-right text-xs">
+                <label className="font-bold text-slate-450">{isRtl ? 'تحديد الساعة الجديدة' : 'New Time Slot'}</label>
+                <select
+                  required
+                  value={newAppTime}
+                  onChange={(e) => setNewAppTime(e.target.value)}
+                  className="w-full p-2.5 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none text-slate-800 dark:text-white"
+                >
+                  {settings?.bookingTimeSlots?.map((slot) => (
+                    <option key={slot} value={slot}>{slot}</option>
+                  )) || ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'].map(slot => (
+                    <option key={slot} value={slot}>{slot}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3 border-t">
+                <button
+                  type="button"
+                  onClick={() => setEditingAppointment(null)}
+                  className="px-4 py-2 text-xs bg-slate-105 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold cursor-pointer"
+                >
+                  {isRtl ? 'إلغاء' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-emerald-650 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-extrabold shadow-md cursor-pointer"
+                >
+                  {isRtl ? 'حفظ التغييرات الآن' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

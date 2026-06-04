@@ -84,6 +84,9 @@ export function sanitizeInput(input: string): string {
 
 export function sanitizeObject<T>(obj: T): T {
   if (!obj || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) {
+    return (obj as any[]).map(item => sanitizeObject(item)) as unknown as T;
+  }
   const newObj = { ...obj } as any;
   for (const key in newObj) {
     if (typeof newObj[key] === 'string') {

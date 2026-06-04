@@ -1,0 +1,569 @@
+{
+  "users": [
+    {
+      "id": "u_doctor",
+      "username": "doctor",
+      "passwordHash": "b7a803e27703d6c478e181cbf2b4a9af5003673978924be29c058eeb1bf1a9cda7dc42a33ad2c3290bb18da6db891ae3341ddbb451e5236ab929bc2c5c41fe57",
+      "salt": "83833e2301a27752155cc13e761de9aa",
+      "role": "doctor",
+      "name": "Dr. Joseph Hakim",
+      "phone": "+966-501-234-567",
+      "email": "doctor@hakimclinic.com",
+      "is2FAEnabled": true,
+      "twoFASecret": "HAKIMSECRET7799KEY",
+      "createdAt": "2026-06-01T08:00:00Z",
+      "lastActive": "2026-06-04T11:22:26.056Z",
+      "twoFAVerifiedAt": "2026-06-04T11:22:26.056Z"
+    },
+    {
+      "id": "u_recep",
+      "username": "receptionist",
+      "passwordHash": "e6335b3ec731ed360fa1524304731924bb68b55abd7634a561b22d995a2ee7b5af61edc20b74bfc13d6de1ee9194745df73422b5dfda05e01490922e604db5bd",
+      "salt": "a2357f27d6d4b5a61412d32058fca056",
+      "role": "receptionist",
+      "name": "Amina Al-Ahmed",
+      "phone": "+966-505-998-877",
+      "email": "amina@hakimclinic.com",
+      "is2FAEnabled": false,
+      "twoFASecret": "RECEPSECRET8844KEY",
+      "createdAt": "2026-06-01T08:30:00Z",
+      "lastActive": "2026-06-04T10:50:17.979Z"
+    },
+    {
+      "id": "u_patient_ahmad",
+      "username": "patient",
+      "passwordHash": "05e99954c5a368675dd38b47ff295dfaa2868d2d776a553b53e60999a328bef6ef2eb9c0f27d0c7b416a43562ff488f3e3e0750ac76736f016fae67e261fda8d",
+      "salt": "0daef3880a4e1d803a206f3fe159fe8f",
+      "role": "patient",
+      "name": "أحمد منصور",
+      "phone": "+966-509-001-002",
+      "email": "ahmad.mansour@gmail.com",
+      "is2FAEnabled": false,
+      "twoFASecret": "",
+      "createdAt": "2026-06-02T10:00:00Z",
+      "lastActive": "2026-06-04T11:15:28.297Z"
+    },
+    {
+      "id": "u_patient_sara",
+      "username": "patient2",
+      "passwordHash": "66c4dad7350da7593f70bb011e1834547487782be4bf20f1be073c061898a013ce5a13aafc7094178763b7e5cc038ecdfbd97d5ca4a60ddab6009dbdead76b04",
+      "salt": "37656fcdef1b112274abc8688697cb2f",
+      "role": "patient",
+      "name": "سارة سميث",
+      "phone": "+966-503-441-229",
+      "email": "sara.smith@hotmail.com",
+      "is2FAEnabled": false,
+      "twoFASecret": "",
+      "createdAt": "2026-06-02T11:00:00Z"
+    },
+    {
+      "id": "u_1780570285109",
+      "username": "pat_583",
+      "passwordHash": "0c3b10bf4ae12d319d24ef4f576bd580baf376ba8ab401356ac89d200fc6ee1725155b2289ec857aba892d665bb697f4e56954eecf60dc3e01f41cfb794e969e",
+      "salt": "adc9b10193d220fc8bec69db48e4ef60",
+      "role": "patient",
+      "name": "مصطفي ايمن بريك",
+      "phone": "01122454666",
+      "email": "",
+      "is2FAEnabled": false,
+      "twoFASecret": "",
+      "createdAt": "2026-06-04T10:51:25.109Z"
+    }
+  ],
+  "patients": [
+    {
+      "id": "p_ahmad",
+      "userId": "u_patient_ahmad",
+      "fullName": "أحمد بن علي منصور",
+      "phone": "+966-509-001-002",
+      "email": "ahmad.mansour@gmail.com",
+      "age": 42,
+      "gender": "male",
+      "address": "الرياض، حي الياسمين، شارع العليا",
+      "job": "مهندس اتصالات",
+      "socialStatus": "married",
+      "chronicDiseases": "ارتفاع ضغط الدم (Hypertension)",
+      "allergies": "البنسلين (Penicillin)",
+      "currentMedications": "أملوديبين 5 ملغ (Amlodipine 5mg) حبة يومياً",
+      "reasonForVisit": "مراجعة دورية لضغط الدم وحجم الصدر وتغيير الجرعة",
+      "additionalNotes": "يرجى مراجعة نتائج تحليل الدم الربع سنوي الذي تم رفعه بالملفات",
+      "extraFields": [
+        {
+          "label": "المدخن",
+          "value": "نعم (Smoke 10/day)"
+        },
+        {
+          "label": "فصيلة الدم",
+          "value": "O+"
+        }
+      ],
+      "createdAt": "2026-06-02T10:15:00Z"
+    },
+    {
+      "id": "p_sara",
+      "userId": "u_patient_sara",
+      "fullName": "سارة جون سميث",
+      "phone": "+966-503-441-229",
+      "email": "sara.smith@hotmail.com",
+      "age": 29,
+      "gender": "female",
+      "address": "جدة، حي الروضة",
+      "job": "معلمة لغة إنجليزية",
+      "socialStatus": "single",
+      "chronicDiseases": "الربو الشعبي الخفيف (Asthma)",
+      "allergies": "لا يوجد نوع محدد حالياً",
+      "currentMedications": "بخاخ عند اللزوم (Symbicort)",
+      "reasonForVisit": "ضيق تنفس مستمر مع زيادة نشاط الغبار بالجو",
+      "additionalNotes": "سرعة دقات القلب تزيد مع استخدام البخاخ تكراراً",
+      "extraFields": [
+        {
+          "label": "فصيلة الدم",
+          "value": "A-"
+        }
+      ],
+      "createdAt": "2026-06-02T11:15:00Z"
+    },
+    {
+      "id": "p_1780570285110",
+      "userId": "u_1780570285109",
+      "fullName": "مصطفي ايمن بريك",
+      "phone": "01122454666",
+      "email": "",
+      "age": 22,
+      "gender": "male",
+      "address": "",
+      "job": "",
+      "socialStatus": "divorced",
+      "chronicDiseases": "",
+      "allergies": "",
+      "currentMedications": "",
+      "reasonForVisit": "شفاف",
+      "additionalNotes": "",
+      "extraFields": [],
+      "createdAt": "2026-06-04T10:51:25.110Z"
+    },
+    {
+      "id": "p_1780572077098",
+      "userId": "guest_1780572077098",
+      "fullName": "مصطفي ايمن بريك",
+      "phone": "01114401651",
+      "email": "",
+      "age": 22,
+      "gender": "male",
+      "address": "مغاغه",
+      "job": "",
+      "socialStatus": "single",
+      "chronicDiseases": "لا يوجد",
+      "allergies": "لا يوجد",
+      "currentMedications": "لا يوجد",
+      "reasonForVisit": "الم في العين",
+      "additionalNotes": "",
+      "extraFields": [],
+      "createdAt": "2026-06-04T11:21:17.098Z"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "app_1",
+      "patientId": "p_ahmad",
+      "patientName": "أحمد بن علي منصور",
+      "patientPhone": "+966-509-001-002",
+      "date": "2026-06-04",
+      "timeSlot": "09:30",
+      "status": "confirmed",
+      "reason": "فحص دوري وضغط الدم",
+      "isUrgent": true,
+      "queueNumber": 1,
+      "createdAt": "2026-06-02T12:00:00Z"
+    },
+    {
+      "id": "app_2",
+      "patientId": "p_sara",
+      "patientName": "سارة جون سميث",
+      "patientPhone": "+966-503-441-229",
+      "date": "2026-06-04",
+      "timeSlot": "11:00",
+      "status": "pending",
+      "reason": "ضيق تنفس ومراجعة بخاخ الصدر",
+      "isUrgent": false,
+      "queueNumber": 2,
+      "createdAt": "2026-06-03T14:20:00Z"
+    },
+    {
+      "id": "app_1780572089662",
+      "patientId": "p_1780572077098",
+      "patientName": "مصطفي ايمن بريك",
+      "patientPhone": "01114401651",
+      "date": "2026-06-04",
+      "timeSlot": "14:00",
+      "status": "pending",
+      "reason": "الم في العين",
+      "isUrgent": false,
+      "queueNumber": 3,
+      "createdAt": "2026-06-04T11:21:29.662Z"
+    }
+  ],
+  "medicalRecords": [
+    {
+      "id": "mr_1",
+      "patientId": "p_ahmad",
+      "doctorId": "u_doctor",
+      "date": "2026-05-15",
+      "symptoms": "تسارع غير منتظم في نبضات القلب عند المجهود، قياس الضغط بالمنزل بلغ 145/95",
+      "diagnosis": "ارتفاع ضغط الدم من الدرجة الأولى صادر عن التوتر العضلي والشرياني المعتدل",
+      "treatmentPlan": "زيادة جرعة أملوديبين لـ 10ملغ أو الإبقاء وطلب تخطيط قلب Ecg",
+      "notes": "حالة الصدر مستقرة، يوصى بالتقليل من الأغذية المالحة وممارسة تمرين المشي المعتدل",
+      "createdAt": "2026-05-15T10:00:00Z"
+    }
+  ],
+  "medicalFiles": [
+    {
+      "id": "file_1",
+      "patientId": "p_ahmad",
+      "documentName": "تحليل الدم الربع سنوي - CBC & Lipid.pdf",
+      "documentType": "pdf",
+      "fileUrl": "data:application/pdf;base64,JVBERi0xLjQKJ...",
+      "fileSize": "342 KB",
+      "uploadedAt": "2026-06-03T18:00:00Z"
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": "pr_1",
+      "patientId": "p_ahmad",
+      "patientName": "أحمد بن علي منصور",
+      "doctorName": "Dr. Joseph Hakim",
+      "date": "2026-05-15",
+      "medicines": [
+        {
+          "name": "Amlodipine (Concor 5mg)",
+          "dosage": "5mg",
+          "frequency": "مرة واحدة صباحاً",
+          "duration": "30 يوماً"
+        },
+        {
+          "name": "Omega 3",
+          "dosage": "1000mg",
+          "frequency": "بعد وجبة الغداء مباشرة",
+          "duration": "30 يوماً"
+        }
+      ],
+      "notes": "الرجاء فحص معدل نبضات القلب يومياً وتجربة الابتعاد عن القهوة بعد الـ 4 عصراً",
+      "createdAt": "2026-05-15T10:15:00Z"
+    }
+  ],
+  "doctorSchedules": [
+    {
+      "id": "sch_1",
+      "date": "2026-06-04",
+      "durationMinutes": 30,
+      "maxAppointments": 10,
+      "startTime": "09:00",
+      "endTime": "17:00"
+    }
+  ],
+  "waitingLists": [
+    {
+      "id": "wt_1",
+      "appointmentId": "app_1",
+      "patientId": "p_ahmad",
+      "patientName": "أحمد بن علي منصور",
+      "queueNumber": 1,
+      "status": "waiting",
+      "arrivedAt": "2026-06-04T09:15:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "nt_1",
+      "userId": "u_patient_ahmad",
+      "titleAr": "تذكير بموعد الفحص القادم",
+      "titleEn": "Appointment Reminder",
+      "messageAr": "مرحباً أحمد، نود تذكيرك بالموعد المؤكد اليوم في تمام الـ 09:30 صباحاً.",
+      "messageEn": "Hello Ahmad, your booking is confirmed for today at 09:30 AM.",
+      "isRead": false,
+      "createdAt": "2026-06-04T06:00:00Z"
+    },
+    {
+      "id": "notif_1780570285110",
+      "userId": "u_1780570285109",
+      "titleAr": "مرحباً بك في العيادة الطبية",
+      "titleEn": "Welcome to Hakim Medical Clinic",
+      "messageAr": "تم إنشاء ملف طبي جديد خاص بك. اسم الدخول المؤقت: pat_583، كلمة المرور الافتراضية: patient123",
+      "messageEn": "Your new billing patient file is created. Your login id is: pat_583, temporary passcode: patient123",
+      "isRead": false,
+      "createdAt": "2026-06-04T10:51:25.110Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "lg_1",
+      "timestamp": "2026-06-04T08:00:00Z",
+      "actor": "system",
+      "role": "system",
+      "action": "DB_INITIALIZATION",
+      "status": "SUCCESS",
+      "details": "تم تهيئة النظام الأمني للعيادة الطبية بنجاح وتوليد المكونات الاحتياطية وتأمين كلمات المرور.",
+      "ipAddress": "127.0.0.1"
+    },
+    {
+      "id": "lg_2",
+      "timestamp": "2026-06-04T08:05:00Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "LOGIN",
+      "status": "SUCCESS",
+      "details": "تم تسجيل دخول الطبيب بنجاح وتجاوز المصادقة 2FA بنجاح.",
+      "ipAddress": "192.168.1.10"
+    },
+    {
+      "id": "lg_1780570094660_665",
+      "timestamp": "2026-06-04T10:48:14.660Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "LOGIN",
+      "status": "SUCCESS",
+      "details": "Logged in successfully",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570097369_522",
+      "timestamp": "2026-06-04T10:48:17.369Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570097713_794",
+      "timestamp": "2026-06-04T10:48:17.713Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570136129_18",
+      "timestamp": "2026-06-04T10:48:56.129Z",
+      "actor": "مصطفي ايمن",
+      "role": "guest",
+      "action": "LOGIN",
+      "status": "FAILURE",
+      "details": "User record not found",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570137970_194",
+      "timestamp": "2026-06-04T10:48:57.970Z",
+      "actor": "مصطفي ايمن",
+      "role": "guest",
+      "action": "LOGIN",
+      "status": "FAILURE",
+      "details": "User record not found",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570147264_984",
+      "timestamp": "2026-06-04T10:49:07.264Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "LOGIN",
+      "status": "SUCCESS",
+      "details": "Logged in successfully",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570149738_125",
+      "timestamp": "2026-06-04T10:49:09.738Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570149892_26",
+      "timestamp": "2026-06-04T10:49:09.892Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570172872_554",
+      "timestamp": "2026-06-04T10:49:32.872Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "LOGIN_2FA",
+      "status": "SUCCESS",
+      "details": "2FA Verification successful",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570217979_943",
+      "timestamp": "2026-06-04T10:50:17.979Z",
+      "actor": "receptionist",
+      "role": "receptionist",
+      "action": "LOGIN",
+      "status": "SUCCESS",
+      "details": "Logged in successfully",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570285111_408",
+      "timestamp": "2026-06-04T10:51:25.111Z",
+      "actor": "receptionist",
+      "role": "receptionist",
+      "action": "CREATE_PATIENT",
+      "status": "SUCCESS",
+      "details": "Created patient medical portfolio 'مصطفي ايمن بريك' with patient user ID pat_583",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570340765_394",
+      "timestamp": "2026-06-04T10:52:20.765Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "LOGIN_2FA",
+      "status": "SUCCESS",
+      "details": "2FA Verification successful",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780570365857_661",
+      "timestamp": "2026-06-04T10:52:45.857Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for مصطفي ايمن بريك",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780571728296_290",
+      "timestamp": "2026-06-04T11:15:28.296Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "LOGIN",
+      "status": "SUCCESS",
+      "details": "Logged in successfully",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780571731441_662",
+      "timestamp": "2026-06-04T11:15:31.441Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780571733001_165",
+      "timestamp": "2026-06-04T11:15:33.001Z",
+      "actor": "patient",
+      "role": "patient",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for أحمد بن علي منصور",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572089662_623",
+      "timestamp": "2026-06-04T11:21:29.662Z",
+      "actor": "مصطفي ايمن بريك",
+      "role": "patient",
+      "action": "PUBLIC_BOOK_APPOINTMENT",
+      "status": "SUCCESS",
+      "details": "Direct booking created for مصطفي ايمن بريك on 2026-06-04 at 14:00 (Queue: #3)",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572089824_211",
+      "timestamp": "2026-06-04T11:21:29.824Z",
+      "actor": "مصطفي ايمن بريك",
+      "role": "patient",
+      "action": "PUBLIC_TRACK_PORTAL",
+      "status": "SUCCESS",
+      "details": "Tracked clinical bookings for مصطفي ايمن بريك. Found 1 apps.",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572104995_935",
+      "timestamp": "2026-06-04T11:21:44.995Z",
+      "actor": "مصطفي ايمن بريك",
+      "role": "patient",
+      "action": "PUBLIC_TRACK_PORTAL",
+      "status": "SUCCESS",
+      "details": "Tracked clinical bookings for مصطفي ايمن بريك. Found 1 apps.",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572125507_775",
+      "timestamp": "2026-06-04T11:22:05.507Z",
+      "actor": "مصطفي ايمن بريك",
+      "role": "patient",
+      "action": "PUBLIC_TRACK_PORTAL",
+      "status": "SUCCESS",
+      "details": "Tracked clinical bookings for مصطفي ايمن بريك. Found 1 apps.",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572146056_391",
+      "timestamp": "2026-06-04T11:22:26.056Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "LOGIN_2FA",
+      "status": "SUCCESS",
+      "details": "2FA Verification successful",
+      "ipAddress": "197.59.191.205"
+    },
+    {
+      "id": "lg_1780572176321_338",
+      "timestamp": "2026-06-04T11:22:56.321Z",
+      "actor": "doctor",
+      "role": "doctor",
+      "action": "VIEW_PATIENT_CLINICAL_FILE",
+      "status": "SUCCESS",
+      "details": "Accessed full details & prescription files for مصطفي ايمن بريك",
+      "ipAddress": "197.59.191.205"
+    }
+  ],
+  "settings": {
+    "id": "settings_main",
+    "doctorNameAr": "د. يوسف حكيم",
+    "doctorNameEn": "Dr. Joseph Hakim",
+    "specialtyAr": "أخصائي جراحة القلب والأوعية الدموية",
+    "specialtyEn": "Cardiovascular Surgery Consultant",
+    "clinicNameAr": "مستوصف الشفاء مجمع القلب التخصصي",
+    "clinicNameEn": "Al-Shifa Cardiovascular Clinic",
+    "bookingTimeSlots": [
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30"
+    ],
+    "allowOnlineBooking": true,
+    "googleSheetsEnabled": false,
+    "googleSheetsUrl": "",
+    "theme": "light"
+  }
+}

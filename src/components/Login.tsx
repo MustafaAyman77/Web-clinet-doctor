@@ -33,6 +33,7 @@ export default function Login({
   const [twoFAUserId, setTwoFAUserId] = useState('');
   const [twoFACorrectSecret, setTwoFACorrectSecret] = useState('');
   const [twoFACode, setTwoFACode] = useState('');
+  const [showStaffPresets, setShowStaffPresets] = useState(false);
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
@@ -300,38 +301,82 @@ export default function Login({
         </div>
 
         {/* Preset accounts selector - Crucial Developer Experience enhancement */}
-        <div className="w-full mt-6 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 text-xs">
-          <p className="font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 text-center">
+        <div className="w-full mt-6 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 text-xs text-center space-y-4">
+          <p className="font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 text-center">
             {t.demologsTitle}
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-            <button
-              onClick={() => triggerFillCredentials('doctor', 'doctor123')}
-              className="px-3 py-2 bg-white dark:bg-slate-900 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-center select-none cursor-pointer transition flex flex-col items-center gap-1"
-            >
-              <span className="font-extrabold text-emerald-600 dark:text-emerald-400">
-                {lang === 'ar' ? 'الطبيب الرئيسي' : 'Master Doctor'}
-              </span>
-              <span className="font-mono text-[10px] opacity-75">doctor / doctor123</span>
-            </button>
-            <button
-              onClick={() => triggerFillCredentials('receptionist', 'receptionist123')}
-              className="px-3 py-2 bg-white dark:bg-slate-900 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-center select-none cursor-pointer transition flex flex-col items-center gap-1"
-            >
-              <span className="font-extrabold text-blue-600 dark:text-blue-400">
-                {lang === 'ar' ? 'موظف الاستقبال' : 'Receptionist'}
-              </span>
-              <span className="font-mono text-[10px] opacity-75">receptionist / receptionist123</span>
-            </button>
-            <button
-              onClick={() => triggerFillCredentials('patient', 'patient123')}
-              className="px-3 py-2 bg-white dark:bg-slate-900 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-center select-none cursor-pointer transition flex flex-col items-center gap-1"
-            >
-              <span className="font-extrabold text-purple-600 dark:text-purple-400">
-                {lang === 'ar' ? 'مريض تجريبي' : 'Sample Patient'}
-              </span>
-              <span className="font-mono text-[10px] opacity-75">patient / patient123</span>
-            </button>
+
+          <div className="flex flex-col gap-3">
+            {/* Patient notice - Directing to direct tracking portal as login is disabled */}
+            <div className="flex justify-center p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg max-w-sm w-full mx-auto">
+              <div className="space-y-1">
+                <span className="text-[10px] uppercase tracking-wider font-extrabold text-amber-600 dark:text-amber-400 block">
+                  ⚠️ {lang === 'ar' ? 'تم إلغاء نظام الحسابات وكلمات المرور للمرضى' : 'Patient Credentials Dispensed'}
+                </span>
+                <p className="text-[10px] text-slate-500 leading-normal">
+                  {lang === 'ar' 
+                    ? 'لم يعد المرضى بحاجة لكلمة مرور للدخول. يرجى التوجه للصفحة الرئيسية واستعراض حقيبتك وحساب زمن انتظارك بالاسم والهاتف مباشرة.' 
+                    : 'Abolished password friction! Go to the Home Screen to book or track your live wait duration using Name and Phone.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Secure staff toggle section */}
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
+              {!showStaffPresets ? (
+                <button
+                  type="button"
+                  onClick={() => setShowStaffPresets(true)}
+                  className="px-3 py-1.5 text-[10px] font-bold text-slate-500 hover:text-emerald-600 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 rounded-lg transition inline-flex items-center gap-1"
+                >
+                  <span>🔒</span>
+                  <span>
+                    {lang === 'ar' 
+                      ? 'إظهار خيارات دخول الإدارة والأطباء (بيانات مخفية)' 
+                      : 'Reveal Staff & Doctor Entry Options (Usernames Masked)'}
+                  </span>
+                </button>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex justify-end pr-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowStaffPresets(false)}
+                      className="text-[10px] text-slate-400 hover:text-slate-600 font-bold"
+                    >
+                      {lang === 'ar' ? 'إخفاء الحسابات' : 'Hide Accounts'}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => triggerFillCredentials('doctor', 'doctor123')}
+                      className="px-3 py-2 bg-white dark:bg-slate-900 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-center select-none cursor-pointer transition flex flex-col items-center gap-1"
+                    >
+                      <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-xs">
+                        {lang === 'ar' ? 'الطبيب الرئيسي (محمي)' : 'Master Doctor (Protected Account)'}
+                      </span>
+                      <span className="font-mono text-[10px] opacity-75 text-rose-500 font-bold">
+                        {lang === 'ar' ? 'اسم المستخدم: [مخفي للأمن] / كلمة مرور: [مخفية]' : 'Username: d****r / Password: •••••'}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => triggerFillCredentials('receptionist', 'receptionist123')}
+                      className="px-3 py-2 bg-white dark:bg-slate-900 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-center select-none cursor-pointer transition flex flex-col items-center gap-1"
+                    >
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 text-xs">
+                        {lang === 'ar' ? 'موظف الاستقبال (محمي)' : 'Receptionist (Protected Account)'}
+                      </span>
+                      <span className="font-mono text-[10px] opacity-75 text-rose-500 font-bold">
+                        {lang === 'ar' ? 'اسم المستخدم: [مخفي للأمن] / كلمة مرور: [مخفية]' : 'Username: r**********t / Password: •••••'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

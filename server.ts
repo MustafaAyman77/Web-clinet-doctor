@@ -104,6 +104,271 @@ async function startServer() {
 
   // --- API ENDPOINTS ---
 
+  // Helper: Estimate Wait Time
+  function calculateEstimatedWait(patientId: string, dateStr: string): number {
+    const waitingList = dbService.getWaitingList();
+    // Check if they are in the live waiting lobby today
+    const liveEntry = waitingList.find(w => w.patientId === patientId && w.status !== 'completed');
+    if (liveEntry) {
+      if (liveEntry.status === 'in_consultation') {
+        return 0; // they are being seen right now!
+      }
+      // In-clinic live queue calculation
+      const aheadCount = waitingList.filter(
+        w => w.queueNumber < liveEntry.queueNumber && w.status === 'waiting'
+      ).length;
+      const inConsultationCount = waitingList.filter(w => w.status === 'in_consultation').length;
+      return (aheadCount * 15) + (inConsultationCount * 10);
+    }
+    
+    // Calculate based on scheduled appointments before them for that day
+    const targetApps = dbService.getAppointments().filter(
+      a => a.date === dateStr && a.status === 'pending'
+    );
+    const myApp = targetApps.find(a => a.patientId === patientId);
+    if (myApp) {
+      const appsAhead = targetApps.filter(a => a.timeSlot < myApp.timeSlot).length;
+      return appsAhead * 20; // 20 minutes estimated duration per appointment
+    }
+    return 0;
+  }
+
+  // POST Public: Direct booking without username/password
+  app.post('/api/public/book-appointment', (req: Request, res: Response) => {
+    const {
+      fullName,
+      phone,
+      email,
+      age,
+      gender,
+      address,
+      job,
+      socialStatus,
+      chronicDiseases,
+      allergies,
+      currentMedications,
+      date,
+      timeSlot,
+      reason,
+      isUrgent
+    } = req.body;
+
+    const ip = getIp(req);
+
+    if (!fullName || !phone || !date || !timeSlot) {
+      return res.status(400).json({ error: 'الاسم ورقم الهاتف والتاريخ والوقت حقول مطلوبة للحجز / Name, phone, date, and timeslot are required' });
+    }
+
+    const phoneClean = phone.trim().replace(/[^0-9]/g, '');
+    let patient = dbService.getPatients().find(p => p.phone.trim().replace(/[^0-9]/g, '') === phoneClean);
+
+    if (!patient) {
+      const pId = 'p_' + Date.now();
+      patient = {
+        id: pId,
+        userId: 'guest_' + Date.now(),
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        email: email || '',
+        age: Number(age) || 0,
+        gender: gender || 'male',
+        address: address || '',
+        job: job || '',
+        socialStatus: socialStatus || 'single',
+        chronicDiseases: chronicDiseases || '',
+        allergies: allergies || '',
+        currentMedications: currentMedications || '',
+        reasonForVisit: reason || '',
+        additionalNotes: '',
+        extraFields: [],
+        createdAt: new Date().toISOString()
+      };
+      dbService.addPatient(patient);
+    } else {
+      // Update patient profile info with latest data
+      dbService.updatePatient(patient.id, {
+        age: Number(age) || patient.age,
+        address: address || patient.address,
+        chronicDiseases: chronicDiseases || patient.chronicDiseases,
+        allergies: allergies || patient.allergies,
+        currentMedications: currentMedications || patient.currentMedications
+      });
+      patient = dbService.getPatients().find(p => p.id === patient!.id)!;
+    }
+
+    // Schedule collision check
+    const conflict = dbService.getAppointments().find(
+      app => app.date === date && 
+             app.timeSlot === timeSlot && 
+             app.status !== 'cancelled'
+    );
+
+    if (conflict) {
+      return res.status(409).json({ 
+        error: 'عذراً، هذا التوقيت محجوز بالفعل لمريض آخر. يرجى اختيار موعد آخر.',
+        errorEn: 'DateTime collision: Select another booking slot' 
+      });
+    }
+
+    const currentDayApps = dbService.getAppointments().filter(a => a.date === date);
+    const queueNumber = currentDayApps.length + 1;
+
+    const newApp: Appointment = {
+      id: 'app_' + Date.now(),
+      patientId: patient.id,
+      patientName: patient.fullName,
+      patientPhone: patient.phone,
+      date,
+      timeSlot,
+      status: 'pending',
+      reason: reason || 'حجز موعد عام عبر البواية التلقائية',
+      isUrgent: !!isUrgent,
+      queueNumber,
+      createdAt: new Date().toISOString()
+    };
+
+    dbService.addAppointment(newApp);
+
+    // Audit Log
+    dbService.addAuditLog({
+      timestamp: new Date().toISOString(),
+      actor: fullName,
+      role: 'patient',
+      action: 'PUBLIC_BOOK_APPOINTMENT',
+      status: 'SUCCESS',
+      details: `Direct booking created for ${fullName} on ${date} at ${timeSlot} (Queue: #${queueNumber})`,
+      ipAddress: ip
+    });
+
+    return res.json({
+      success: true,
+      patient,
+      appointment: newApp,
+      estimatedWaitMinutes: calculateEstimatedWait(patient.id, date)
+    });
+  });
+
+  // POST Public: Inquire and track appointment status and wait times by name and phone
+  app.post('/api/public/track-booking', (req: Request, res: Response) => {
+    const { fullName, phone } = req.body;
+    const ip = getIp(req);
+
+    if (!fullName || !phone) {
+      return res.status(400).json({ error: 'الاسم ورقم الهاتف حقول مطلوبة للاستعلام / Full Name and Phone are required' });
+    }
+
+    const phoneClean = phone.trim().replace(/[^0-9]/g, '');
+    const nameLower = fullName.toLowerCase().trim();
+
+    const foundPatients = dbService.getPatients().filter(p => {
+      const pPhone = p.phone.trim().replace(/[^0-9]/g, '');
+      return pPhone === phoneClean;
+    });
+
+    if (foundPatients.length === 0) {
+      return res.status(404).json({ error: 'عذراً، لم نجد أي ملف مريض مسجل برقم الهاتف هذا. الرجاء التأكد من الرقم أو القيام بحجز جديد أولاً.' });
+    }
+
+    // Find the one that matches name best, or just choose the first matching phone
+    const patient = foundPatients.find(p => p.fullName.toLowerCase().trim().includes(nameLower)) || foundPatients[0];
+
+    const appointments = dbService.getAppointments().filter(a => a.patientId === patient.id);
+    const records = dbService.getMedicalRecords().filter(r => r.patientId === patient.id);
+    const prescriptions = dbService.getPrescriptions().filter(pr => pr.patientId === patient.id);
+    const files = dbService.getMedicalFiles().filter(f => f.patientId === patient.id);
+    const waitingList = dbService.getWaitingList();
+    const currentWaitingEntry = waitingList.find(w => w.patientId === patient.id && w.status !== 'completed');
+
+    // Get wait time estimates for active/pending appointments
+    const activeApp = appointments.find(a => a.status === 'pending' || a.status === 'confirmed');
+    const estimatedWaitMinutes = activeApp ? calculateEstimatedWait(patient.id, activeApp.date) : 0;
+
+    dbService.addAuditLog({
+      timestamp: new Date().toISOString(),
+      actor: patient.fullName,
+      role: 'patient',
+      action: 'PUBLIC_TRACK_PORTAL',
+      status: 'SUCCESS',
+      details: `Tracked clinical bookings for ${patient.fullName}. Found ${appointments.length} apps.`,
+      ipAddress: ip
+    });
+
+    return res.json({
+      success: true,
+      patient,
+      appointments,
+      records,
+      prescriptions,
+      files,
+      currentWaitingEntry,
+      estimatedWaitMinutes
+    });
+  });
+
+  // POST Public: Upload file directly to active profile
+  app.post('/api/public/upload-file', (req: Request, res: Response) => {
+    const { patientId, documentName, documentType, fileUrl, fileSize } = req.body;
+    if (!patientId || !documentName || !fileUrl) {
+      return res.status(400).json({ error: 'معطيات ناقصة لرفع الملف / Missing data to host document' });
+    }
+
+    const newFile: MedicalFile = {
+      id: 'file_' + Date.now(),
+      patientId,
+      documentName,
+      documentType: documentType || 'pdf',
+      fileUrl,
+      fileSize: fileSize || 'Unknown size',
+      uploadedAt: new Date().toISOString()
+    };
+
+    dbService.addMedicalFile(newFile);
+
+    return res.json(newFile);
+  });
+
+  // POST Public: Secure appointment cancellation using matching phone number verification
+  app.post('/api/public/cancel-appointment', (req: Request, res: Response) => {
+    const { appointmentId, phone } = req.body;
+    const ip = getIp(req);
+
+    if (!appointmentId || !phone) {
+      return res.status(400).json({ error: 'من فضلك أرسل معرّف الحجز ورقم الهاتف / Missing appointment ID or phone number' });
+    }
+
+    const app = dbService.getAppointments().find(a => a.id === appointmentId);
+    if (!app) {
+      return res.status(404).json({ error: 'عذراً، لم نتمكن من العثور على هذا الحجز / Appointment not found' });
+    }
+
+    const phoneCleanInput = phone.trim().replace(/[^0-9]/g, '');
+    const phoneCleanApp = app.patientPhone.trim().replace(/[^0-9]/g, '');
+
+    if (phoneCleanInput !== phoneCleanApp) {
+      return res.status(403).json({ error: 'تطابق رقم الهاتف غير صحيح، لا يمكنك إلغاء موعد مريض آخر / Verification phone number mismatch' });
+    }
+
+    dbService.updateAppointment(appointmentId, { status: 'cancelled' });
+
+    // Also remove from live waiting list if checked in
+    const activeWaiting = dbService.getWaitingList().find(w => w.appointmentId === appointmentId && w.status !== 'completed');
+    if (activeWaiting) {
+      dbService.updateWaitingListStatus(activeWaiting.id, 'completed', 0);
+    }
+
+    dbService.addAuditLog({
+      timestamp: new Date().toISOString(),
+      actor: app.patientName,
+      role: 'patient',
+      action: 'PUBLIC_CANCEL_APPOINTMENT',
+      status: 'SUCCESS',
+      details: `Cancelled appointment ${appointmentId} through public passwordless interface`,
+      ipAddress: ip
+    });
+
+    return res.json({ success: true });
+  });
+
   // Auth: Log in
   app.post('/api/auth/login', (req: Request, res: Response) => {
     const { username, password } = req.body;
@@ -849,6 +1114,64 @@ async function startServer() {
     });
 
     return res.json(result);
+  });
+
+  // POST Notify patient and receptionist about allowing patient entry
+  app.post('/api/waiting-list/:id/notify-entry', authenticate, enforceRoles(['doctor']), (req: AuthenticatedRequest, res: Response) => {
+    const { id } = req.params;
+    const session = req.user!;
+    
+    const entry = dbService.getWaitingList().find(q => q.id === id);
+    if (!entry) {
+      return res.status(404).json({ error: 'Patient ticket missing in actively waiting ledger lines' });
+    }
+
+    // Update status to in_consultation dynamically so everyone knows they are being called/admitted
+    const updated = dbService.updateWaitingListStatus(id, 'in_consultation');
+
+    // Find patient record
+    const patientObj = dbService.getPatients().find(p => p.id === entry.patientId);
+
+    // 1. Create notification for the Patient if they have associated user account
+    if (patientObj && patientObj.userId) {
+      dbService.addNotification({
+        id: 'notif_pat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        userId: patientObj.userId,
+        titleAr: '🚨 تنبيه الدخول للكشف عاجل',
+        titleEn: '🚨 Consultation Entry Alert',
+        messageAr: `عزيزي المريض ${entry.patientName}، تفضل بالدخول إلى غرفة الطبيب الآن للكشف الطبي.`,
+        messageEn: `Dear patient ${entry.patientName}, please proceed to the doctor's consultation room now.`,
+        isRead: false,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    // 2. Create notification for all Receptionists
+    const recs = dbService.getUsers().filter(u => u.role === 'receptionist');
+    recs.forEach(rec => {
+      dbService.addNotification({
+        id: 'notif_rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        userId: rec.id,
+        titleAr: '🔔 إشعار من الطبيب بالسماح بالدخول',
+        titleEn: '🔔 Doctor authorization for patient entry',
+        messageAr: `يرجى التوجيه بالسماح للمريض ${entry.patientName} الدخول للطبيب الآن.`,
+        messageEn: `Please assist patient ${entry.patientName} to enter the doctor's room now.`,
+        isRead: false,
+        createdAt: new Date().toISOString()
+      });
+    });
+
+    dbService.addAuditLog({
+      timestamp: new Date().toISOString(),
+      actor: sessionToUsername(session.userId),
+      role: session.role,
+      action: 'QUEUE_NOTIFY_ENTRY',
+      status: 'SUCCESS',
+      details: `Dispatched entry call notifications to patient ${entry.patientName} and receptionists.`,
+      ipAddress: getIp(req)
+    });
+
+    return res.json({ success: true, entry: updated || entry });
   });
 
   // DELETE Active waiting list (Reset every new morning)

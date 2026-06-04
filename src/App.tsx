@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import DoctorDashboard from './components/DoctorDashboard';
 import ReceptionistDashboard from './components/ReceptionistDashboard';
@@ -15,6 +16,9 @@ export default function App() {
   const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('token'));
   const [user, setUser] = useState<SafeUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Auth screen selector ('landing' or 'login')
+  const [currentAuthScreen, setCurrentAuthScreen] = useState<'landing' | 'login'>('landing');
 
   // Layout states
   const [lang, setLang] = useState<'ar' | 'en'>('ar');
@@ -90,6 +94,7 @@ export default function App() {
     sessionStorage.removeItem('token');
     setToken(null);
     setUser(null);
+    setCurrentAuthScreen('landing');
     showToast(lang === 'ar' ? 'تم تسجيل الخروج بنجاح وتأمين قنوات الاتصال' : 'Logged out and connection secured', 'success');
   };
 
@@ -110,15 +115,40 @@ export default function App() {
   return (
     <div className={theme === 'dark' ? 'dark' : ''}>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
-        {!user || !token ? (
-          <Login
-            onLoginSuccess={handleLoginSuccess}
-            lang={lang}
-            setLang={setLang}
-            theme={theme}
-            setTheme={setTheme}
-            onShowToast={showToast}
-          />
+         {!user || !token ? (
+          currentAuthScreen === 'landing' ? (
+            <LandingPage
+              onLoginSuccess={handleLoginSuccess}
+              onGoToLogin={() => setCurrentAuthScreen('login')}
+              lang={lang}
+              setLang={setLang}
+              theme={theme}
+              setTheme={setTheme}
+              onShowToast={showToast}
+            />
+          ) : (
+            <div className="relative">
+              {/* Floating Back to Home button */}
+              <div className="absolute top-4 left-4 z-50">
+                <button
+                  type="button"
+                  onClick={() => setCurrentAuthScreen('landing')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:scale-105 transition text-xs font-semibold cursor-pointer"
+                >
+                  <span className="text-emerald-600 font-bold">←</span>
+                  <span>{lang === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}</span>
+                </button>
+              </div>
+              <Login
+                onLoginSuccess={handleLoginSuccess}
+                lang={lang}
+                setLang={setLang}
+                theme={theme}
+                setTheme={setTheme}
+                onShowToast={showToast}
+              />
+            </div>
+          )
         ) : (
           <>
             {user.role === 'doctor' && (

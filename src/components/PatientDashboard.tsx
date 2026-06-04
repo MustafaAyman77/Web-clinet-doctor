@@ -40,6 +40,7 @@ export default function PatientDashboard({
   const [records, setRecords] = useState<MedicalRecord[]>([]);
   const [files, setFiles] = useState<MedicalFile[]>([]);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Self-Booking State
@@ -100,8 +101,16 @@ export default function PatientDashboard({
       if (aResp && aResp.ok) {
         setAppointments(await aResp.json());
       }
+
+      // Load notifications
+      const nResp = await apiFetch('/api/notifications');
+      if (nResp && nResp.ok) {
+        setNotifications(await nResp.json());
+      }
     };
     loadPatientContext();
+    const interval = setInterval(loadPatientContext, 5000);
+    return () => clearInterval(interval);
   }, [refreshTrigger]);
 
   // Self-Booking Form Submit with collision check proxy
@@ -209,6 +218,36 @@ export default function PatientDashboard({
           </button>
         </div>
       </header>
+
+      {/* Real-time summon notices from doctor for this patient */}
+      {notifications.filter(n => !n.isRead && (n.id.startsWith('notif_pat_') || n.titleAr.includes('الدخول للكشف') || n.messageAr.includes('تفضل بالدخول'))).length > 0 && (
+        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-rose-600 text-white font-sans px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg border-b border-amber-600">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔔</span>
+            <div className="text-right">
+              <h4 className="font-black text-sm md:text-base">
+                {lang === 'ar' ? 'تنبيه عاجل: تفضل بالدخول الآن للطبيب للكشف' : 'Urgent: Please proceed to the doctor consultation room'}
+              </h4>
+              <p className="text-xs text-amber-500 text-slate-100 font-bold">
+                {(() => {
+                  const activeNotif = notifications.find(n => !n.isRead && (n.id.startsWith('notif_pat_') || n.titleAr.includes('الدخول للكشف')));
+                  return activeNotif ? (lang === 'ar' ? activeNotif.messageAr : activeNotif.messageEn) : '';
+                })()}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              // Mark as read
+              await apiFetch('/api/notifications/read', { method: 'POST' });
+              setRefreshTrigger(p => p + 1);
+            }}
+            className="px-4 py-2 bg-white text-rose-700 font-extrabold rounded-xl shadow-md hover:scale-[1.02] active:scale-[0.98] transition text-xs md:text-sm cursor-pointer select-none"
+          >
+            {lang === 'ar' ? 'فهمت، جاري الدخول' : 'Understood, heading in'}
+          </button>
+        </div>
+      )}
 
       <div className="max-w-[1600px] mx-auto p-4 md:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Left Side Column: Metrics upcoming reserves, self-service schedule tool */}
