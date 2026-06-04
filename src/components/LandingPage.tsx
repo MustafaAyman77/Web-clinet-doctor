@@ -437,11 +437,11 @@ export default function LandingPage({
           <div className="flex flex-wrap items-center gap-6 justify-center">
             <div className="flex items-center gap-2 text-slate-300 hover:text-white transition">
               <Phone className="w-4 h-4 text-emerald-400" />
-              <span className="font-semibold font-mono text-[13px]">{isRtl ? 'الهاتف: 1500-546-7789+' : 'PHONE NUMBER: +1500-546-7789'}</span>
+              <span className="font-semibold font-mono text-[13px]">{isRtl ? 'الهاتف: 01012345678 (20+)' : 'PHONE: +20-101-234-5678'}</span>
             </div>
             <div className="flex items-center gap-2 text-slate-300 hover:text-white transition">
               <Mail className="w-4 h-4 text-teal-400" />
-              <span className="font-semibold font-mono text-[12px]">xyz@example.com</span>
+              <span className="font-semibold font-mono text-[12px]">mohamed.goda@eyeclinic.com</span>
             </div>
             
             {/* Direct Scroll to Booking button (Requirement 2) */}
@@ -459,17 +459,17 @@ export default function LandingPage({
       <nav className="sticky top-0 z-45 bg-[#1a3a5a]/95 dark:bg-slate-900/95 backdrop-blur-md text-white border-b border-blue-900/40 px-6 py-4 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Medzoon Logo styling */}
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-black text-xl tracking-tighter">
-              M
+            {/* Elegant logo with an Eye icon representing specialized Ophthalmology / LASIK */}
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white">
+              <Eye className="w-5 h-5 text-white animate-pulse" />
             </div>
             <div>
               <h2 className="text-xl font-black text-white leading-tight flex items-center gap-1.5 font-sans">
-                <span>{isRtl ? 'ميدزون' : 'Medzoon'}</span>
-                <span className="text-xs bg-emerald-500 text-[#0a2540] py-0.5 px-2 rounded-full font-black font-mono">24/7</span>
+                <span>{isRtl ? 'د. محمد جودة' : 'Dr. M. Goda'}</span>
+                <span className="text-xs bg-emerald-500 text-[#0a2540] py-0.5 px-2 rounded-full font-black font-mono">LIVE</span>
               </h2>
-              <p className="text-[10px] text-blue-200 uppercase tracking-widest font-mono font-bold">
-                {isRtl ? 'أقسام الطوارئ الكارديولوجية المتقدمة' : 'CARDIOLOGY & ADVANCED DIAGNOSTICS'}
+              <p className="text-[10px] text-sky-200 uppercase tracking-widest font-mono font-bold">
+                {isRtl ? 'طب وجراحة العيون والليزك' : 'OPHTHALMOLOGY & LASIK CLINIC'}
               </p>
             </div>
           </div>
@@ -526,8 +526,8 @@ export default function LandingPage({
             <div className="max-w-4xl mx-auto flex flex-col items-center justify-center text-center gap-5">
               <div className="space-y-1">
                 <span className="px-2.5 py-0.5 rounded-md text-[10px] bg-sky-950 text-sky-300 font-extrabold font-mono border border-sky-850">STAFF LOGIN SUITE</span>
-                <h3 className="text-base font-black text-white">{isRtl ? 'تسجيل دخول منسوبي عيادة ميدزون الطبية' : 'Identify & Log into Clinic Staff Workspace'}</h3>
-                <p className="text-xs text-slate-400">{isRtl ? 'الرجاء اختيار بوابتك للمتابعة إلى ملفات المرضى' : 'Select your clinical role credentials pathway'}</p>
+                <h3 className="text-base font-black text-white">{isRtl ? 'تسجيل دخول منسوبي عيادة د. محمد جودة' : 'Identify & Log into Dr. Mohamed Goda Workspace'}</h3>
+                <p className="text-xs text-slate-400">{isRtl ? 'الرجاء اختيار بوابتك للمتابعة إلى بوابات العمل' : 'Select your clinical role credentials pathway'}</p>
               </div>
 
               {/* Two buttons showing Dr. and Staff registration / login portals (Requirement 4) */}
@@ -582,7 +582,7 @@ export default function LandingPage({
           <div className="lg:col-span-7 space-y-6 text-right" dir={isRtl ? 'rtl' : 'ltr'}>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black text-sky-200 bg-blue-950/60 border border-blue-800/55 rounded-full">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>{isRtl ? 'صحة، عناية وأمومة فائقة على مدار الساعة - Medzoon' : 'HEALTH & MEDICAL SYSTEM SERVICES'}</span>
+              <span>{isRtl ? 'طب وجراحة العيون وجراحات الليزك والفيكو برعاية د. محمد جودة' : 'COMPREHENSIVE EYE CARE & LASIK BY DR. MOHAMED GODA'}</span>
             </span>
             
             {/* Visual alignment precisely matching the photo "Best Caring, Better Doctors" */}
@@ -602,8 +602,8 @@ export default function LandingPage({
 
             <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-xl">
               {isRtl
-                ? 'مستشفى ميدزون التخصصي للقلب والباطنية يقدم أحدث طرق العلاج والتشخيص الرقمي المتكامل للملفات المرضية بدون كلمات مرور والتعرف اللحظي بمكالمة الاسم ورقم الهاتف ومتابعة وقت الانتظار دقيقة بدقيقة.'
-                : 'Medzoon clinical division delivers exceptional outcomes of patient services with certified medical records and actual lobby estimation intervals. Experience the medicine with passwordless authentication.'}
+                ? 'تقدم عيادة د. محمد جودة لطب وجراحة العيون والليزك أحدث طرق العلاج والتشخيص الرقمي المتكامل للملفات المرضية مع الفحوصات الدقيقة بقرنية العين والمياه البيضاء بدون كلمات مرور والتعرف اللحظي بمكالمة الاسم ورقم الهاتف ومتابعة دور الاستقبال دقيقة بدقيقة.'
+                : 'Dr. Mohamed Goda Ophthalmology & LASIK Clinic delivers premium diagnostic services, advanced cataract treatments, and laser vision correction along with passwordless immediate file lookup.'}
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
@@ -631,10 +631,10 @@ export default function LandingPage({
             <div className="w-72 h-72 md:w-80 md:h-80 rounded-full border-4 border-dashed border-sky-450 border-sky-400 absolute animate-spin" style={{ animationDuration: '40s' }} />
             
             <div className="relative w-64 h-64 md:w-72 md:h-72 bg-gradient-to-tr from-[#12304d] to-sky-850 rounded-full shadow-2xl overflow-hidden flex items-center justify-center border-4 border-[#5ca1ff]/40">
-              <Stethoscope className="w-28 h-28 text-sky-400 animate-pulse duration-1000" />
+              <Eye className="w-28 h-28 text-sky-400 animate-pulse duration-1000" />
               <div className="absolute inset-x-0 bottom-4 text-center bg-slate-950/80 mx-4 p-2.5 rounded-xl border border-blue-900">
-                <p className="text-[11px] font-black">{isRtl ? 'البروفيسور استشاري أمراض القلب يوسف حكيم' : 'Prof. Joseph Hakim'}</p>
-                <p className="text-[9px] text-[#5ca1ff]">{isRtl ? 'زمالة الكارديولوجي الأوروبية ESC' : 'European Cardiology Fellowship'}</p>
+                <p className="text-[11px] font-black">{isRtl ? 'الدكتور محمد جودة • مدرس العيون بجامعة الأزهر' : 'Dr. Mohamed Goda • Ophthalmology Lecturer'}</p>
+                <p className="text-[9px] text-[#5ca1ff]">{isRtl ? 'استشاري المياه البيضاء وزرع العدسات والليزك وتصحيح الإبصار' : 'Consultant of Cataract, Lens Implantation & LASIK'}</p>
               </div>
             </div>
           </div>
@@ -649,12 +649,12 @@ export default function LandingPage({
               <Clock className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="font-black text-sm md:text-base uppercase tracking-wider">{isRtl ? 'طوارئ واستدعاء طبي على مدار الساعة' : '24*7 Emergency Services'}</h3>
-              <p className="text-[10px] text-blue-200">{isRtl ? 'خدمة إسعاف وتأمين دخول مباشر' : 'Immediate admission dispatch'}</p>
+              <h3 className="font-black text-sm md:text-base uppercase tracking-wider">{isRtl ? 'كشف وتصحيح النظر والليزك الفوري' : 'Ophthalmology & LASIK Services'}</h3>
+              <p className="text-[10px] text-blue-200">{isRtl ? 'رعاية تخصصية لسلامة الإبصار' : 'Immediate ophthalmic clinic dispatch'}</p>
             </div>
           </div>
           <p className="text-xs text-blue-100 leading-relaxed font-semibold">
-            {isRtl ? 'قسم الطوارئ بمستشفى ميدزون مجهز بالكامل للرعاية المركزة وأزمات الشرايين تحت إشراف طاقمنا المتخصص لإنقاذ حالات الأزمات القلبية.' : 'High-fidelity cardiology response system with dedicated clinicians ready round-the-clock.'}
+            {isRtl ? 'العيادة مجهزة بالكامل بأحدث أجهزة فحص قاع العين وضغط العين وتصوير القرنية بالتبادل، لتقديم أدق كشف بمستويات أمان وسرية فائقة.' : 'The clinic is fully equipped with highly sophisticated digital eye-scanners, lens profiling, and cornea mapping.'}
           </p>
         </div>
 
@@ -664,12 +664,12 @@ export default function LandingPage({
               <Users className="w-6 h-6 text-[#5ca1ff]" />
             </div>
             <div>
-              <h3 className="font-black text-sm md:text-base uppercase tracking-wider">{isRtl ? 'استشاريون معتمدون دولياً' : 'Skilled Medical Professionals'}</h3>
-              <p className="text-[10px] text-blue-200">{isRtl ? 'نخبة من الحاصلين على الزمالات الدولية' : 'Fellowship certified healthcare expert'}</p>
+              <h3 className="font-black text-sm md:text-base uppercase tracking-wider">{isRtl ? 'صرح طبي بقيادة د. محمد جودة' : 'Ophthalmic Clinical Excellence'}</h3>
+              <p className="text-[10px] text-blue-200">{isRtl ? 'عضوية الجمعيات الأوربية والمصرية لطب وجراحة العيون' : 'Members of ESCRS & EOS societies'}</p>
             </div>
           </div>
           <p className="text-xs text-blue-100 leading-relaxed font-semibold">
-            {isRtl ? 'يمتاز مستشارونا بالتحديث السنوي المعتمد للخبرة ولديهم سنوات طوال في المعاينة بمناظير الشرايين التاجية وعمليات القسطرة.' : 'Get the treatment path prescribed and tracked electronically under the counsel of prominent fellows.'}
+            {isRtl ? 'يمتاز د. محمد جودة بصفته مدرس العيون بجامعة الأزهر واستشاري الشبكية وقرنية العين بخبرة واسعة وممتدة في علاج ضغط العين وجراحات الفيمتو ليزك وبدون ألم.' : 'Diagnose any eye condition and undergo professional lens implants or LASIK procedures directed under the counsel of prominent fellows.'}
           </p>
         </div>
       </div>
@@ -687,70 +687,70 @@ export default function LandingPage({
         {/* Clinical solutions cards list (Four horizontal blocks exactly like the image) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Card 1: Orthopedic Care Sector */}
+          {/* Card 1: LASIK & Vision Correction */}
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-200 flex flex-col justify-between h-64 text-right">
             <div>
               <span className="text-[#4483e4] text-xs font-black font-mono block mb-1">01</span>
-              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'جراحة وتقويم العظام والعمود الفقري' : 'Orthopedic Care Sector'}</h3>
+              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'عمليات الليزك وتصحيح الإبصار' : 'LASIK & Vision Correction'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
-                {isRtl ? 'علاج وتأهيل آلام الركبة والعمود الفقري والمفاصل والتشخيص بأحدث أجهزة التصوير الحركي للمفاصل.' : 'Advanced musculoskeletal treatments and cartilage reconstructions under fellows.'}
+                {isRtl ? 'أحدث تقنيات الفيمتو ليزك، الفيمتو سمايل، والليزك السطحي (PRK) للتخلص تماماً من النظارات الطبية وبنسب نجاح فائقة.' : 'Experience clear vision through advanced Femto-LASIK, Femto-Smile, and custom refractive surgery.'}
               </p>
             </div>
             <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800/80">
               <span className="text-[10px] text-blue-500 font-extrabold uppercase">{isRtl ? 'قراءة المزيد' : 'Learn More'}</span>
               <div className="p-2 bg-blue-50 dark:bg-slate-850 rounded-lg text-[#4483e4]">
-                <Activity className="w-5 h-5" />
+                <Sparkles className="w-5 h-5 text-indigo-500" />
               </div>
             </div>
           </div>
 
-          {/* Card 2: Dentistry Department */}
+          {/* Card 2: Cataract Surgery */}
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-200 flex flex-col justify-between h-64 text-right">
             <div>
               <span className="text-[#4483e4] text-xs font-black font-mono block mb-1">02</span>
-              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'طب وجراحة الفم والأسنان' : 'Dentistry Department'}</h3>
+              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'إزالة المياه البيضاء وزرع العدسات' : 'Cataract & Lens Implantation'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
-                {isRtl ? 'زراعة وتقويم الأسنان بأحدث التقنيات الرقمية وتصميم الابتسامات الإستشارية بطرق آمنة لا ألم فيها.' : 'Cosmetic smile designs and tooth implantations with zero-pain anesthesia methods.'}
+                {isRtl ? 'إيقاع تفتيت المياه البيضاء بالموجات فوق الصوتية (الفاكو) بدون ألم وغرز، وزرع أحدث العدسات متعددة البؤر ومصححة الاستجماتيزم.' : 'Sutureless cataract microsurgery via advanced phacoemulsification and premium intraocular lens (IOL) implants.'}
               </p>
             </div>
             <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800/80">
               <span className="text-[10px] text-blue-500 font-extrabold uppercase">{isRtl ? 'قراءة المزيد' : 'Learn More'}</span>
               <div className="p-2 bg-blue-50 dark:bg-slate-850 rounded-lg text-[#4483e4]">
-                <Award className="w-5 h-5" />
+                <Award className="w-5 h-5 text-amber-500" />
               </div>
             </div>
           </div>
 
-          {/* Card 3: Neurology Department */}
+          {/* Card 3: Keratoconus Management */}
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-200 flex flex-col justify-between h-64 text-right">
             <div>
               <span className="text-[#4483e4] text-xs font-black font-mono block mb-1">03</span>
-              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'أمراض وجراحة المخ والأعصاب' : 'Neurology Department'}</h3>
+              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'علاج القرنية المخروطية' : 'Keratoconus Management'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
-                {isRtl ? 'معالجة آلام الصداع النصفي المزمن والصرع وأمراض ضمور الأعصاب الطرفية بإشراف علمي متميز.' : 'Peripheral neuropathy therapies and cranial diagnostics using advanced EEG technology.'}
+                {isRtl ? 'بروتوكولات علاجية متكاملة تشمل تثبيت القرنية بالأمواج الضوئية (Cross-linking) وزرع الحلقات المجهرية لتثبيت ومنع تدهور الإبصار.' : 'Advanced corneal cross-linking services and introstromal ring segment implants to stabilize keratoconus.'}
               </p>
             </div>
             <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800/80">
               <span className="text-[10px] text-blue-500 font-extrabold uppercase">{isRtl ? 'قراءة المزيد' : 'Learn More'}</span>
               <div className="p-2 bg-blue-50 dark:bg-slate-850 rounded-lg text-[#4483e4]">
-                <ShieldAlert className="w-5 h-5" />
+                <Activity className="w-5 h-5 text-emerald-500" />
               </div>
             </div>
           </div>
 
-          {/* Card 4: Cardiology Sector */}
+          {/* Card 4: Retinopathy & Glaucoma */}
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-200 flex flex-col justify-between h-64 text-right">
             <div>
               <span className="text-[#4483e4] text-xs font-black font-mono block mb-1">04</span>
-              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'طب وجراحة القلب والشرايين' : 'Cardinology Sector'}</h3>
+              <h3 className="font-black text-sm text-slate-800 dark:text-white uppercase mb-2">{isRtl ? 'اعتلال الشبكية السكري وضغط العيون' : 'Retinopathy & Glaucoma'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
-                {isRtl ? 'عيادة متخصصة لمتابعة وقاية شرايين القلب وعمل تخطيط القلب المجهود وتصوير الإيكو الملوّن ثلاثي الأبعاد.' : 'Echocardiograms, stress test evaluations, and custom heart valve diagnostics.'}
+                {isRtl ? 'أحدث علاجات وجراحات ضغط العين (المياه الزرقاء)، وحقن الشبكية السكري وتثبيت الشبكية بالليزر المتقدم لحماية الرؤية.' : 'Comprehensive glaucoma drainage procedures, diabetic retinopathy monitoring, and anti-VEGF therapeutic injections.'}
               </p>
             </div>
             <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800/80">
               <span className="text-[10px] text-blue-500 font-extrabold uppercase">{isRtl ? 'قراءة المزيد' : 'Learn More'}</span>
               <div className="p-2 bg-blue-50 dark:bg-slate-850 rounded-lg text-[#4483e4]">
-                <Heart className="w-5 h-5 text-rose-500" />
+                <Eye className="w-5 h-5 text-blue-500" />
               </div>
             </div>
           </div>
@@ -763,11 +763,11 @@ export default function LandingPage({
         <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase flex items-center gap-2">
-              <Stethoscope className="w-6 h-6 text-[#4483e4]" />
-              <span>{isRtl ? 'مستعدون لتقديم كشوفات تشخيصية مميزة' : 'We Are Best Professional In Medical Sectors'}</span>
+              <Eye className="w-6 h-6 text-[#4483e4]" />
+              <span>{isRtl ? 'مستعدون لتقديم كشوفات وأحدث عمليات الليزك والعيون' : 'We Are Best Professional In Ophthalmology Sectors'}</span>
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
-              {isRtl ? 'تعتبر عيادة ميدزون الرائدة للرعاية الاستشارية بالمملكة العربية السعودية لأننا نوائم التشخيص المنهجي السليم مع سرعة دور الكشف الفوري وتوفير سبل الدقة الكاملة بملف المريض اللحظي.' : 'With highly sophisticated lab equipment and direct consultation networks, Hakim digital portal ensures the patient achieves optimal diagnostic counseling safely.'}
+              {isRtl ? 'تعتبر عيادة الدكتور محمد جودة الرائدة للرعاية الاستشارية لطب وجراحة العيون والليزك لأننا نوائم التشخيص وأدق أجهزة الفحص المنهجي السليم مع سرعة دور الكشف الفوري وتوفير سبل الدقة الكاملة بملف المريض اللحظي.' : 'With highly sophisticated ophthalmic diagnostics and direct lens/retina consultation networks, Dr. Mohamed Goda digital portal ensures the patient achieves optimal visual health safely.'}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
               <div className="p-3 bg-blue-50/50 dark:bg-slate-950/30 rounded-xl border text-center">
@@ -1606,10 +1606,10 @@ export default function LandingPage({
 
             <div className="border-b-4 border-emerald-600 pb-4 text-center space-y-1">
               <h2 className="text-xl font-extrabold text-emerald-700 tracking-tight flex items-center justify-center gap-2">
-                <Stethoscope className="w-6 h-6 text-emerald-600" />
-                <span>عيادة د. يوسف حكيم الاستشارية لأمراض القلب والباطنية</span>
+                <Eye className="w-6 h-6 text-emerald-600" />
+                <span>عيادة د. محمد جودة لطب وجراحة العيون والليزك</span>
               </h2>
-              <p className="text-xs text-slate-500">منظومة الرعاية والتشخيص الرقمي المتكاملة • هاتف: 011-4029281 • الرياض، المملكة العربية السعودية</p>
+              <p className="text-xs text-slate-500">منظومة رعاية العيون والتشخيص الرقمي المتكاملة • هاتف: 01012345678 • القاهرة، مصر</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4 text-xs bg-slate-50 px-3 rounded-xl border border-slate-200 mt-4 leading-relaxed">
@@ -1621,7 +1621,7 @@ export default function LandingPage({
               <div className="space-y-1 sm:text-left">
                 <p><strong>رقم الروشتة:</strong> <span className="font-mono font-bold text-indigo-600">#{selectedPrescription.id}</span></p>
                 <p><strong>التاريخ المعتمد:</strong> {selectedPrescription.date}</p>
-                <p><strong>الطبيب المعاين:</strong> {selectedPrescription.doctorName || 'د. يوسف حكيم'}</p>
+                <p><strong>الطبيب المعاين:</strong> {selectedPrescription.doctorName || 'د. محمد جودة'}</p>
               </div>
             </div>
 
@@ -1694,8 +1694,8 @@ export default function LandingPage({
 
       {/* Trust Accreditations Footer Section */}
       <footer className="mt-16 text-center max-w-4xl mx-auto px-6 text-xs text-slate-450 text-slate-500 dark:text-slate-400 font-mono space-y-1.5 border-t border-slate-200/50 dark:border-slate-800/60 pt-6">
-        <p>© 2026 MEDZOON HOSPITALS & SECURE CLINICS. ALL RIGHTS RESERVED.</p>
-        <p>{isRtl ? 'نظام مشفر بالكامل ومتوافق مع أعلى مستويات الأمان والسرية الطبية. رعاية استشارية متميزة بقيادة د. يوسف حكيم.' : 'End-to-end encrypted clinical database system designed for secure consultation logs.'}</p>
+        <p>© 2026 DR. MOHAMED GODA CLINIC & SECURE PORTAL. ALL RIGHTS RESERVED.</p>
+        <p>{isRtl ? 'نظام مشفر بالكامل ومتوافق مع أعلى مستويات الأمان والسرية الطبية. عيادة طب وجراحة العيون والليزك بقيادة د. محمد جودة.' : 'End-to-end encrypted clinical eye diagnostic database system designed for secure consultation logs.'}</p>
         <div className="flex justify-center gap-4 text-[10px] text-blue-500 font-bold uppercase pt-1">
           <span>{isRtl ? 'السرية الطبية ومكافحة التزييف' : 'Medical Integrity Shield'}</span>
           <span>•</span>

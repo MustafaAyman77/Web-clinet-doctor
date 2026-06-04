@@ -1799,9 +1799,9 @@ export default function DoctorDashboard({
 
             {/* Print Letterhead layout */}
             <div className="border-b-4 border-emerald-600 pb-4 text-center space-y-2">
-              <h2 className="text-xl font-extrabold tracking-tight text-emerald-800">{isRtl ? 'مستوصف الحكيم التخصصي' : 'Al-Shifa Cardiovascular Center'}</h2>
+              <h2 className="text-xl font-extrabold tracking-tight text-emerald-800">{isRtl ? 'عيادة د. محمد جودة لطب وجراحة العيون' : 'Dr. Mohamed Goda Ophthalmology Clinic'}</h2>
               <p className="text-xs text-slate-500 font-bold">
-                {isRtl ? 'عيادة جراحة وأمراض الأوعية الدموية - د. يوسف حكيم' : 'Cardiovascular Clinic Consultant • Dr. Joseph Hakim'}
+                {isRtl ? 'مدرس طب وجراحة العيون بجامعة الأزهر واستشاري المياه البيضاء والليزك - د. محمد جودة' : 'Ophthalmology Lecturer & Cataract/LASIK Consultant • Dr. Mohamed Goda'}
               </p>
               <p className="text-[10px] text-slate-400 font-mono">2026-06-04 • CLINIC ORDER #{printedPrescription.id}</p>
             </div>
@@ -1853,13 +1853,13 @@ export default function DoctorDashboard({
             {/* Seal / Sign block */}
             <div className="pt-6 border-t font-semibold flex items-center justify-between text-xs text-slate-500">
               <div>
-                <p>HAKIM MEDICAL CLINIC SYSTEM</p>
+                <p>DR. MOHAMED GODA OPHTHALMOLOGY SYSTEM</p>
                 <p className="text-[10px] font-mono">Secured Verification hash: sha-256 pbkdf2 verified</p>
               </div>
               <div className="text-right text-center select-none">
                 <p className="text-[9px] text-slate-400 mb-1">{isRtl ? 'الختم والتوقيع الرقمي' : 'Signed electronic seal'}</p>
                 <div className="border border-emerald-600/30 text-emerald-800 font-black px-4 py-1.5 uppercase tracking-widest bg-emerald-50 rounded">
-                  {isRtl ? 'مُعتـمد الحكيم' : 'SECURE SIGNED'}
+                  {isRtl ? 'مُعتـمد د. جودة' : 'SECURE SIGNED'}
                 </div>
               </div>
             </div>

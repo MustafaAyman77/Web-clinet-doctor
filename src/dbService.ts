@@ -45,12 +45,12 @@ interface DbSchema {
 // Initial default settings
 const defaultSettings: ClinicSettings = {
   id: 'settings_main',
-  doctorNameAr: 'د. يوسف حكيم',
-  doctorNameEn: 'Dr. Joseph Hakim',
-  specialtyAr: 'أخصائي جراحة القلب والأوعية الدموية',
-  specialtyEn: 'Cardiovascular Surgery Consultant',
-  clinicNameAr: 'مستوصف الشفاء مجمع القلب التخصصي',
-  clinicNameEn: 'Al-Shifa Cardiovascular Clinic',
+  doctorNameAr: 'د. محمد جودة',
+  doctorNameEn: 'Dr. Mohamed Goda',
+  specialtyAr: 'مدرس طب وجراحة العيون بجامعة الأزهر واستشاري المياه البيضاء والقرنية والليزك',
+  specialtyEn: 'Ophthalmology Lecturer at Al-Azhar University & Cataract/LASIK Consultant',
+  clinicNameAr: 'عيادة د. محمد جودة لطب وجراحة العيون والليزك',
+  clinicNameEn: 'Dr. Mohamed Goda Ophthalmology & LASIK Clinic',
   bookingTimeSlots: [
     '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
     '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
@@ -208,9 +208,9 @@ class DatabaseManager {
         passwordHash: hashPassword('doctor123', salt1),
         salt: salt1,
         role: 'doctor',
-        name: 'Dr. Joseph Hakim',
-        phone: '+966-501-234-567',
-        email: 'doctor@hakimclinic.com',
+        name: 'Dr. Mohamed Goda',
+        phone: '+20-101-234-5678',
+        email: 'mohamed.goda@eyeclinic.com',
         is2FAEnabled: true,
         twoFASecret: 'HAKIMSECRET7799KEY',
         createdAt: '2026-06-01T08:00:00Z'
@@ -350,13 +350,13 @@ class DatabaseManager {
         id: 'pr_1',
         patientId: 'p_ahmad',
         patientName: 'أحمد بن علي منصور',
-        doctorName: 'Dr. Joseph Hakim',
+        doctorName: 'Dr. Mohamed Goda',
         date: '2026-05-15',
         medicines: [
-          { name: 'Amlodipine (Concor 5mg)', dosage: '5mg', frequency: 'مرة واحدة صباحاً', duration: '30 يوماً' },
-          { name: 'Omega 3', dosage: '1000mg', frequency: 'بعد وجبة الغداء مباشرة', duration: '30 يوماً' }
+          { name: 'قطرة عيون مرطبة (Systane Ultra)', dosage: 'قطرة واحدة', frequency: '4 مرات يومياً بفارق 4 ساعات', duration: '15 يوماً' },
+          { name: 'قطرة عيون لضغط العين (Xalatan)', dosage: 'قطرة واحدة', frequency: 'مرة واحدة قبل النوم مباشرة', duration: '30 يوماً' }
         ],
-        notes: 'الرجاء فحص معدل نبضات القلب يومياً وتجربة الابتعاد عن القهوة بعد الـ 4 عصراً',
+        notes: 'الرجاء الالتزام بوضع قطرات العين بانتظام بالتبادل وتجنب لمس أو فرك العين باليدين مطلقاً والمتابعة بعد أسبوعين.',
         createdAt: '2026-05-15T10:15:00Z'
       }
     ];

@@ -221,11 +221,11 @@ export default function ReceptionistDashboard({
   const openNotificationModal = (patient: Patient, app?: Appointment) => {
     const appointmentText = app 
       ? (isRtl 
-        ? `نذكرك بموعدك المحجوز في عيادة د. يوسف حكيم الكشوفات اليوم ${app.date} في تمام الساعة ${app.timeSlot}. بانتظار تشريفك لنا.`
-        : `Reminder: Your appointment with Dr Joseph Hakim is scheduled for ${app.date} at ${app.timeSlot}. We await your visit.`)
+        ? `نذكرك بموعدك المحجوز في عيادة د. محمد جودة لطب العيون اليوم ${app.date} في تمام الساعة ${app.timeSlot}. بانتظار تشريفك لنا.`
+        : `Reminder: Your appointment with Dr. Mohamed Goda is scheduled for ${app.date} at ${app.timeSlot}. We await your visit.`)
       : (isRtl 
-        ? `أهلاً بك عيادة ميدزون الطبية. يرجى مراجعة الاستقبال لتحديث ملفك الطبي.`
-        : `Hello from Medzoon Clinics. Please review the front desk to update your medical file.`);
+        ? `أهلاً بك في عيادة د. محمد جودة لطب وجراحة العيون وجراحات الليزك. يرجى مراجعة الاستقبال لتحديث ملفك الطبي.`
+        : `Hello from Dr. Mohamed Goda Ophthalmology & LASIK Clinic. Please review the front desk to update your medical file.`);
 
     setNotificationTarget({ patient, app });
     setCustomNotificationMsg(appointmentText);

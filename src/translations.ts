@@ -6,7 +6,7 @@
 export const TRANSLATIONS = {
   ar: {
     // Brand & General
-    appTitle: 'نظام الحكيم لإدارة العيادات الطبية',
+    appTitle: 'عيادة د. محمد جودة لطب وجراحة العيون والليزك',
     doctorRole: 'طبيب معالج',
     receptionistRole: 'موظف استقبال',
     patientRole: 'حساب المريض',
@@ -174,7 +174,7 @@ export const TRANSLATIONS = {
   },
   en: {
     // Brand & General
-    appTitle: 'Al-Hakim Medical Clinic Suite',
+    appTitle: 'Dr. Mohamed Goda Ophthalmology & LASIK Clinic',
     doctorRole: 'Attending Physician',
     receptionistRole: 'Lobby Receptionist',
     patientRole: 'Patient Portal Account',
