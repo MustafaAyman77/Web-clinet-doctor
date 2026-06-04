@@ -1,0 +1,6 @@
+{
+  "name": "Hakim Clinic System",
+  "description": "A highly secure and comprehensive medical clinic management system featuring portals for doctors, receptionists, and patients. Supports bilingual view (Arabic & English), light/dark themes, booking calendars, medical records, digital prescriptions, audit logs, and secure database backups.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
